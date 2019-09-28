@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+	<meta charset="utf-8">
+
+	
+
+	<title>用 react-native-ble-plx 來和 BLE Peripheral 互動 | Kuan and the Elephant</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<meta name="robots" content="noindex,nofollow">
+	
+	
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/css/normalize.css" type="text/css">
+	<link rel="stylesheet" href="/css/basscss.css" type="text/css">
+	<link rel="stylesheet" href="/css/basscss-ui-groups.css" type="text/css">
+	<link rel="stylesheet" href="/css/tomorrow.css" type="text/css">
+	<link rel="stylesheet" href="/css/style.css" type="text/css">
+	
+		<link href="https://rachel.objectstore.co/dist/fonts/lato-v13/lato-v13-all.css" rel="stylesheet" type="text/css">
+	
+	
+
+	<!--[if lt IE 9]><script src="/js/html5.js" type="text/javascript"></script><![endif]-->
+	<script src="/js/main.js" type="text/javascript"></script>
+</head>
+</html>
+<body>
+	<section class="container m4 clearfix">
+		<div class="clearfix">
+			<div class="mb4 sm-flex center nowrap">
+	<div class="flex-auto block">
+		<a href="/" class="btn button-narrow h2">Kuan and the Elephant</a>
+<!--		 | <small class="muted"></small>-->
+	</div>
+</div>
+
+			<div class="mn1 center">
+	<a target="_blank" href="https://kusakawazeusu.github.io/" class="btn button-narrow">Profile</a>
+
+	
+		<a href="/archives/" class="btn button-narrow">Archives</a>
+	
+
+	
+		<a href="/categories/Movie" class="btn button-narrow">Movie</a>
+	
+		<a href="/categories/Programming" class="btn button-narrow">Programming</a>
+	
+		<a href="/categories/Travel" class="btn button-narrow">Travel</a>
+	
+</div>
+
+			<div class="p0 col col-12">
+				<div class="m0 py2">
+	<div class="md-col-10 mx-auto">
+		<div class="overflow-hidden bg-white rounded">
+			<div class="m1 p2 white">
+				<div class="clearfix">
+					<div class="left">
+						<h1 class="h2 m0"><a href="/2019/08/13/ReactNativeBlePlx/" class="black">
+						用 react-native-ble-plx 來和 BLE Peripheral 互動
+						</a></h1>
+					</div>
+					<div class="right"><span class="h6 muted black">
+						Aug 13 2019
+					</span></div>
+				</div>
+			</div>
+			<div class="p2 border-top">
+				<img src="/2019/08/13/ReactNativeBlePlx/01.jpeg">
+
+<h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>最近在做一個 BLE（低功耗藍牙） 的 APP 案，從開發工具選擇、研究到實作中間花了一些時間，也踩了許多對 BLE 知識不夠所產生的雷。在開發第一版時，對裝置的連線總是特別慢，而且找不出什麼原因，上了好多討論版發問但得到的回答甚少，我甚至拋棄 React native 跑去怒學 Kotlin 實作一個 demo，但也沒解決問題，後來怎麼解決呢？換了一個藍牙晶片後走路跟飛的一樣，這件事也大大加深了我對「硬體好可怕」的既定印象 😭。</p>
+<a id="more"></a>
+
+<p>以下針對 Android 版本，若 iOS 還踩一堆雷就可以寫第二篇（？）。</p>
+<hr>
+<h2 id="使用套件：React-native-ble-plx"><a href="#使用套件：React-native-ble-plx" class="headerlink" title="使用套件：React-native-ble-plx"></a>使用套件：React-native-ble-plx</h2><p><a href="https://polidea.github.io/react-native-ble-plx/" target="_blank" rel="noopener">文件</a></p>
+<p>這家公司同時也是 RxAndroidBle 的開發者，相較於其他套件，Ble-plx 的文件寫得清楚許多，討論度也高，不過有些 BLE 的基礎知識應該是假設開發者都懂了（像是寫入資料的 Package 大小限制），所以對 BLE 一無所知的我才踩到不少雷 QQ。</p>
+<p>安裝照著<a href="https://github.com/Polidea/react-native-ble-plx#android-example-setup" target="_blank" rel="noopener">官方沒問題指南</a>。</p>
+<h2 id="Permissions"><a href="#Permissions" class="headerlink" title="Permissions"></a>Permissions</h2><p>BLE 需要在 AndroidManifest.xml 開啟 / 要求下列權限：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.BLUETOOTH"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.BLUETOOTH_ADMIN"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.ACCESS_COARSE_LOCATION"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果你的 APP 只想開放給有 BLE 功能的裝置來安裝，要加上下面這行：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">uses-feature</span> <span class="attr">android:name</span>=<span class="string">"android.hardware.bluetooth_le"</span> <span class="attr">android:required</span>=<span class="string">"true"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="連線流程"><a href="#連線流程" class="headerlink" title="連線流程"></a>連線流程</h2><p>這次開發的專案中，我使用的流程簡化後有下面幾個步驟：</p>
+<ol>
+<li>確認藍牙狀態</li>
+<li>確認權限是否開啟</li>
+<li>搜尋裝置</li>
+<li>與裝置連線</li>
+<li>Discover services and characteristics</li>
+<li>讀寫操作</li>
+</ol>
+<h3 id="Step-1-—-確認藍牙狀態"><a href="#Step-1-—-確認藍牙狀態" class="headerlink" title="Step 1 — 確認藍牙狀態"></a>Step 1 — 確認藍牙狀態</h3><p>一開始我們先實例化 <strong>BleManager</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bleManager = <span class="keyword">new</span> BleManager()</span><br></pre></td></tr></table></figure>
+
+<p>在建立連線之前，我們需要確保使用者已經將藍牙開啟，我們可以透過 <code>state()</code> 來獲取目前的藍牙狀態：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = <span class="keyword">await</span> bleManager.state()</span><br></pre></td></tr></table></figure>
+
+<p>或是用 subscribe 的方式（官網上的例子）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> subscription = <span class="keyword">this</span>.bleManager.onStateChange(<span class="function">(<span class="params">state</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (state === State.PowerOn) &#123;</span><br><span class="line">    <span class="comment">// 已確認藍牙正常開啟</span></span><br><span class="line">    subscription.remove()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+
+<p>只有 <code>PowerOn</code> 才是藍牙開啟且可使用的狀態，若使用者的藍牙尚未就緒，你也可以幫他打開（Android 限定）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> bleManager.enable()</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step2-—-確認權限是否開啟"><a href="#Step2-—-確認權限是否開啟" class="headerlink" title="Step2 — 確認權限是否開啟"></a>Step2 — 確認權限是否開啟</h3><p>接下來要確定 <a href="https://facebook.github.io/react-native/docs/permissionsandroid?source=post_page-----87bbaf495df4----------------------" target="_blank" rel="noopener">ACCESS_COARSE_LOCATION</a> 這個權限是否已經被授權，這個有點離題就不在這裡詳述了，只是沒有打開這個權限會無法進行 Scan。（踩到的第一個雷）</p>
+<h3 id="Step3-—-搜尋裝置"><a href="#Step3-—-搜尋裝置" class="headerlink" title="Step3 — 搜尋裝置"></a>Step3 — 搜尋裝置</h3><p>我們通常會透過 裝置的名稱 ，或是 UUID 來找到我們要連線的裝置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bleManager.startDeviceScan(UUIDs, ScanOptions, Listener)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>UUIDs (Array of UUID)</strong><br>這是在搜尋時會使用的 filter ，如果傳入 null ，則每發現一個任何裝置，他就會 call Listener 一次，若你已經知道你裝置的 UUID ，可以直接在這裡過濾，就不用在 Listener 多做一層檢查。</li>
+</ul>
+<ul>
+<li><strong>ScanOptions (Object)</strong><br>這裡有一個重要的參數叫作 ScanMode，他控制了搜尋裝置的 duty cycle：<ul>
+<li>LowPower：最節能也最慢（預設）</li>
+<li>Balanced：耗能與速度介於兩者之間</li>
+<li>LowLatency：最耗能也最快</li>
+</ul>
+</li>
+</ul>
+<p>還有比較特別的模式： Opportunistic，投機仔，使用的話這個 APP 本身不會進行搜尋，而是會使用其他 APP 的掃描結果，像是我開著我的 APP ，然後另外打開 Ble Tool 來進行搜尋，Ble Tool 找到裝置後我的 APP 就可以把結果撿去用。</p>
+<ul>
+<li><strong>Listener (Function)</strong><br>你的 callback function，若你使用名字來搜尋裝置的話，就像下面的程式：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">bleManager.startDeviceScan(<span class="literal">null</span>, &#123; <span class="attr">scanMode</span>: ScanMode.LowLatency &#125;, (error, device) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (device.name !== <span class="string">"DeviceName"</span>) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  bleManager.stopDeviceScan()</span><br><span class="line">  <span class="comment">// 在這裡對 device 進行操作...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step-4—-與裝置連線"><a href="#Step-4—-與裝置連線" class="headerlink" title="Step 4— 與裝置連線"></a>Step 4— 與裝置連線</h3><p>當你搜尋到裝置，就可以馬上與裝置進行連線：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> device.connect()</span><br><span class="line">&#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(error.reason)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那我可不可以跳過搜尋裝置這個步驟，直接進行連線呢？可以哇，如果你知道裝置的 UUID，你是可以直接進行連線的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> bleManager.connectToDevice(UUID, &#123; <span class="attr">timeout</span>: <span class="number">2000</span> &#125;)</span><br><span class="line">&#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(error.reason)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>connect() 和 connectToDevice() 都會接收一個 ConnectionOptions 的參數，用來設定連線：</p>
+<ul>
+<li><strong>refreshGatt (Boolean)</strong><br>設定 true 的話，連線時會清除 service cache ，如果你的韌體有更新，導致 services / characteristics 經過修改的話，它可以防止你使用到舊版的 cache。</li>
+</ul>
+<ul>
+<li><strong>timeout (Number)</strong><br>單位是 ms，如果你是直接連線不經過搜尋的話，這個特別好用，舉例來說，你可以先進行直接連線， timeout 了再開始搜尋裝置。</li>
+</ul>
+<ul>
+<li><strong>requestMTU (Number)</strong><br>MTU 是 <code>Maximum Transmission Unit</code>，最大傳輸單元，代表你一次 Write 一包的 package 可以有幾個 bytes，但這要看藍牙裝置是否可以調整 MTU。</li>
+</ul>
+<ul>
+<li><strong>autoConnect (Boolean)</strong><br>若設為 false（預設），則會直接進行連線，設為 true 會等裝置 ready 才進行連線。</li>
+</ul>
+<h3 id="Step5-—-Discover-services"><a href="#Step5-—-Discover-services" class="headerlink" title="Step5 — Discover services"></a>Step5 — Discover services</h3><p>連線完之後，你必須要 discover 裝置上所有的 services 和 characteristics 才可以進行讀寫，藍牙裝置裡會有許多的 services ，像是系統電量 Service，或是系統資訊 Service，而每一個 Service 底下會有許多 characteristics （特徵），這才是我們要讀寫資料的目標。</p>
+<p>每一個 Service 和 Characteristic 都有自己的 UUID，在你讀寫前你要知道你該對 哪一個 Service 裡面的 哪一個 Characteristic 進行操作。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> device.discoverAllServicesAndCharacteristics()</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step6-—-讀寫操作"><a href="#Step6-—-讀寫操作" class="headerlink" title="Step6 — 讀寫操作"></a>Step6 — 讀寫操作</h3><h4 id="寫進去"><a href="#寫進去" class="headerlink" title="寫進去"></a>寫進去</h4><p>讀寫的操作目標是 Characteristic （特徵），在 Ble-plx 中，一個 characteristic 物件長得像下面這樣：</p>
+<img src="/2019/08/13/ReactNativeBlePlx/02.png">
+
+<p>在 BLE 傳輸時，會有 MTU （最大傳輸單元）的限制，他代表你一次只能讀寫多少 bytes 的資料，預設值是 23 bytes （但扣掉 3 bytes 的 header，你一次只能傳 20 bytes！），這時候有兩個方法可以解決：</p>
+<ul>
+<li><strong>requestMTU</strong><br>跟裝置協調你們之間溝通的 MTU，但這得看該裝置是否有提供這個功能。</li>
+</ul>
+<ul>
+<li><strong>傳一次不夠，你有傳很多次嗎？</strong><br>例如說我一次要寫 25 bytes 的資料，那我就分成 20 跟 5 bytes 來傳，我使用的是這個方式，因為⋯⋯我的裝置不給我改 MTU ╰(〒皿〒)╯。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> device.writeCharacteristicWithResponse(</span><br><span class="line">  Service_UUID,</span><br><span class="line">  Characteristic_UUID,</span><br><span class="line">  Data</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>要注意的是，你傳的 data 必須是經過 base64 encode 之後的字串，在這裡我推薦使用 JavaScript 的 Buffer 來進行處理，假設我要傳「PASS」四個字元，可以這樣處理：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> byteArray = (<span class="string">"PASS"</span>).split(<span class="string">""</span>).map(<span class="function"><span class="params">char</span> =&gt;</span> char.charCodeAt(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">await</span> device.writeCharacteristicWithResponse(</span><br><span class="line">  Service_UUID,</span><br><span class="line">  Characteristic_UUID,</span><br><span class="line">  Buffer.from(byteArray).toString(<span class="string">"base64"</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>會選用 Buffer ，除了它 encode base64 很方便之外，要進行切割也可以直接用內建的 slice 來進行，相當適合這個情境！</p>
+<h4 id="讀出來"><a href="#讀出來" class="headerlink" title="讀出來"></a>讀出來</h4><p>相較於寫入，讀資料就相對單純：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; value &#125; = <span class="keyword">await</span> bleManager.readCharacteristicForDevice(</span><br><span class="line">  Device_UUID,</span><br><span class="line">  Service_UUID,</span><br><span class="line">  Characteristic_UUID</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(atob(value))</span><br></pre></td></tr></table></figure>
+
+<p>若你要追蹤一個 Characteristic 的數值，想要知道他什麼時候改變的話，也有對應的 function 可以用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> subscription = device.monitorCharacteristicForService(</span><br><span class="line">  Service_UUID,</span><br><span class="line">  Characteristic_UUID,</span><br><span class="line">  (error, characteristic) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (error) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(error)</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(characteristic.value)</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="測試工具"><a href="#測試工具" class="headerlink" title="測試工具"></a>測試工具</h2><p>推薦使用 Android 上的 <a href="https://play.google.com/store/apps/details?id=com.cozyoz.bletool&hl=zh_TW" target="_blank" rel="noopener">BLE Tool</a>，可以進行讀寫，介面相對地好用。</p>
+<hr>
+<h2 id="疑難雜症系列"><a href="#疑難雜症系列" class="headerlink" title="疑難雜症系列"></a>疑難雜症系列</h2><ul>
+<li><strong>狀態太多難以管理</strong><br>上述的連線流程是基本的資料讀寫，在一般的案例中必定有額外的流程，如從 AsyncStorage 撈資料啦、再次確認連線狀態等等⋯⋯<br>而且這些都是非同步操作欸，讓人很頭痛，一不小心又進入 await 地獄，我第二版改用 redux-saga 來改寫連線的流程，Code 變得乾淨許多又很爽，寫測試也變得輕輕鬆鬆！（如果你要寫測試的話）。<br>尤其是 take / put 式的寫法寫起來跟同步 Code 一樣直覺，可以參考這份文件。</li>
+</ul>
+<ul>
+<li><strong>搜尋裝置很慢 / 搜尋不到裝置</strong><br>通常我會先用 BLE Tool 檢查，若 BLE Tool 正常，可以檢查你的 APP 是否有正確授權 ACCESS_COARSE_LOCATION，BLE Tool 也找不到的話⋯⋯可以換顆裝置看看。<br>搜尋很慢的話，將 ScanMode 改成 LowLatency 速度會大幅提升。</li>
+</ul>
+<ul>
+<li><strong>搜尋裝置時快時慢</strong><br>一般的 BLE Peripheral 同時只能與一個 Application 連線，如果它正在與其他裝置處於連接的狀態，則大家都會搜尋不到它，你可以確認一下你的 APP 是否在操作結束後有好好的跟他斷線，如果還是時好時壞，那⋯⋯可以換顆裝置看看。</li>
+</ul>
+<ul>
+<li><strong>在連線前，請記得要先 stopDeviceScan，在 Android 系統中有可能出 Bug</strong><br>以上是與 BLE 裝置連線操作的一些小心得，若有任何錯誤或疑惑的部分，歡迎留言討論。</li>
+</ul>
+
+			</div>
+			<div class="p2 border-top">
+				<div class="clearfix">
+					<div class="left">
+						
+					</div>
+					<div class="ml2 right"><span class="h6 muted black">
+						<a class="link" href="/categories/Programming/">Programming</a>
+					 </span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="clearfix mt2">
+		
+			<a href="/2019/09/27/TypeScriptExpress01/" class="left btn">
+			<svg class="icon" data-icon="chevron-left"></svg>
+			prev: 用 TypeScript 寫 express — Route 與 Controller 篇
+		</a>
+		
+		
+		<a href="/2019/04/17/LaravelEncryption/" class="right btn">
+			next: Laravel Encryption 和一些密碼學筆記
+			<svg class="icon" data-icon="chevron-right"></svg>
+		</a>
+		
+	</div>
+	
+	
+</div>
+
+
+			</div>
+		</div>
+	</section>
+	<div class="container mb2 clearfix">
+	<div class="sm-flex center nowrap mb2 h5">
+		<div class="flex-auto border-bottom">
+			<a href="https://hexo.io/" class="btn block muted">Hexo</a>
+		</div>
+		<div class="flex-auto border-bottom">
+			<a href="https://zllovesuki.git.sx/essays/2016/02/hexo-theme-weightless/" class="btn block">Weightless</a> Theme
+		</div>
+		<div class="flex-auto border-bottom">
+			Rocking <a href="http://www.basscss.com/" class="btn block">Basscss</a>
+		</div>
+		<div class="flex-auto border-bottom">
+			
+		</div>
+	</div>
+</div>
+<script src="/js/geomicons.js"></script>
+<script type="text/javascript">
+	var icons = document.querySelectorAll('[data-icon]');
+	geomicons.inject(icons);
+</script>
+
+
+	<!-- Piwik -->
+	<script type="text/javascript">
+	  var _paq = _paq || [];
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  _paq.push(['enableHeartBeatTimer', 10]);
+	  (function() {
+	    var u="//insidious.sdapi.net/";
+	    _paq.push(['setTrackerUrl', u+'piwik.php']);
+	    _paq.push(['setSiteId', 15]);
+	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<noscript><p><img src="//insidious.sdapi.net/piwik.php?idsite=15" style="border:0;" alt="" /></p></noscript>
+	<!-- End Piwik Code -->
+
+
+
+</body>
+</html>
