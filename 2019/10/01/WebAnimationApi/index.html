@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+	<meta charset="utf-8">
+
+	
+
+	<title>讓人垂涎三尺的 Web Animations API | Kuan and the Elephant</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<meta name="robots" content="noindex,nofollow">
+
+	
+
+	
+	
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/css/normalize.css" type="text/css">
+	<link rel="stylesheet" href="/css/basscss.css" type="text/css">
+	<link rel="stylesheet" href="/css/basscss-ui-groups.css" type="text/css">
+	<link rel="stylesheet" href="/css/tomorrow.css" type="text/css">
+	<link rel="stylesheet" href="/css/style.css" type="text/css">
+	
+		<link href="https://rachel.objectstore.co/dist/fonts/lato-v13/lato-v13-all.css" rel="stylesheet" type="text/css">
+	
+	
+
+	<!--[if lt IE 9]><script src="/js/html5.js" type="text/javascript"></script><![endif]-->
+	<script src="/js/main.js" type="text/javascript"></script>
+</head>
+</html>
+<body>
+	<section class="container m4 clearfix">
+		<div class="clearfix">
+			<div class="mb4 sm-flex center nowrap">
+	<div class="flex-auto block">
+		<a href="/" class="btn button-narrow h2">Kuan and the Elephant</a>
+<!--		 | <small class="muted"></small>-->
+	</div>
+</div>
+
+			<div class="mn1 center">
+	<a target="_blank" href="https://kusakawazeusu.github.io/" class="btn button-narrow">Profile</a>
+
+	
+		<a href="/archives/" class="btn button-narrow">Archives</a>
+	
+
+	
+		<a href="/categories/Movie" class="btn button-narrow">Movie</a>
+	
+		<a href="/categories/Programming" class="btn button-narrow">Programming</a>
+	
+		<a href="/categories/Travel" class="btn button-narrow">Travel</a>
+	
+</div>
+
+			<div class="p0 col col-12">
+				<div class="m0 py2">
+	<div class="md-col-10 mx-auto">
+		<div class="overflow-hidden bg-white rounded">
+			<div class="m1 p2 white">
+				<div class="clearfix">
+					<div class="left">
+						<h1 class="h2 m0"><a href="/2019/10/01/WebAnimationApi/" class="black">
+						讓人垂涎三尺的 Web Animations API
+						</a></h1>
+					</div>
+					<div class="right"><span class="h6 muted black">
+						Oct 1 2019
+					</span></div>
+				</div>
+			</div>
+			<div class="p2 border-top">
+				<iframe id="cp_embed_LYPKrmR" src="//codepen.io/anon/embed/LYPKrmR?height=300px&theme-id=dark&slug-hash=LYPKrmR&default-tab=result&embed-version=2" scrolling="no" frameborder="no" height="300px" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 70%; overflow: hidden;"></iframe>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>用動畫控制 HTML 元素，在 Web 中是不可或缺，卻讓人又愛又恨的功能，想到動畫，腦中先冒出的關鍵字是 DOM animation，或是更常見的 CSS3 Animation，但他們都有一些使用上的「痛點」，前者<strong>難以套用 CSS Property</strong>，後者的<strong>動畫參數難以設定</strong>。</p>
+<a id="more"></a>
+
+<p>例如說，想要用滑鼠點擊的座標來計算動畫參數，單純的 CSS3 Animation 就無法滿足我們，另一種方法是透過 JavaScript 產生 animation 後推入 CSSOM，但這樣的方法並不直覺。在一些搜尋之下找到了 Web Animations API 這個方式，他非常簡易使用，且寫法與 CSS3 Animation 如出一轍，讓動畫能夠被有系統地管理。</p>
+<p>Web Animations API 目前是一項實驗性功能，他的瀏覽度支援度如下圖，可以看到大多都是 Partial Support 到 Element.animate，而這項功能本身就很實用。</p>
+<img src="/2019/10/01/WebAnimationApi/01.png">
+
+<hr>
+<h2 id="CSS3-Animation-與它讓人頭痛的地方"><a href="#CSS3-Animation-與它讓人頭痛的地方" class="headerlink" title="CSS3 Animation 與它讓人頭痛的地方"></a>CSS3 Animation 與它讓人頭痛的地方</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.animation</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: slide <span class="number">1s</span> ease-in;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">keyframes</span> slide &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-40px);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 CSS3 Animation 中，我們會使用 <code>@keyframes</code> 關鍵字來定義一個動畫的內容，接著透過添加 Class 來將動畫應用在 HTML 元素上，有時候我們會需要「觸發」一個動畫，例如當頁面滑動到該元素出現時，或是滑鼠 hover 到元素上時，這時候可以使用 <code>:hover</code> 等選擇器，或是乾脆使用 JavaScript 來替 DOM 加上 Class。</p>
+<p>若我們需要手動 replay 動畫，這時候麻煩的地方就來了，我們得將 Class 移除後再加上去，而且還得用 setTimeout 來延遲（或是其他魔法）才行得通。</p>
+<iframe id="cp_embed_pozXLNJ" src="//codepen.io/anon/embed/pozXLNJ?height=300px&theme-id=dark&slug-hash=pozXLNJ&default-tab=result&embed-version=2" scrolling="no" frameborder="no" height="300px" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 70%; overflow: hidden;"></iframe>
+
+<p>另一個麻煩之處是複數動畫的狀況，若動畫是同時播放倒沒什麼問題，但要串接播放的話，我們就需要幫後面的動畫加上 animation-delay ，因為 CSS Animations 預設同時播放，若兩個動畫修改的 property 一樣，則後面的動畫會蓋過前面的動畫。</p>
+<iframe id="cp_embed_YzKoawa" src="//codepen.io/anon/embed/YzKoawa?height=300px&theme-id=dark&slug-hash=YzKoawa&default-tab=result&embed-version=2" scrolling="no" frameborder="no" height="300px" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 70%; overflow: hidden;"></iframe>
+
+<hr>
+<h2 id="初探-Element-animate-方法"><a href="#初探-Element-animate-方法" class="headerlink" title="初探 Element.animate 方法"></a>初探 Element.animate 方法</h2><p>這個方法其實是許多方法組合而成的捷徑，首先，他會創建一個 Animation 物件，接著應用這個動畫到該元素上，最後回傳這個 Animation。這個物件可以想像成動畫的「播放器」，我們能夠讀取他目前的播放狀態、重新播放，甚至加上事件監聽。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> animation = element.animate(keyframes, options);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Keyframes"><a href="#Keyframes" class="headerlink" title="Keyframes"></a>Keyframes</h3><p>這裡的 keyframes 有兩種不同的格式，第一種和我們的 CSS Animation 相似，是以「關鍵影格」的方式來定義，如下面的 Code，將 CSS property 定義在 JavaScript Object 之中，和寫 React 的時候一樣，要將 CSS property 改成 <code>camelCase</code> 的形式。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> moveXAnimation = [</span><br><span class="line">  <span class="comment">// 關鍵影格 1</span></span><br><span class="line">  &#123;</span><br><span class="line">    transform: <span class="string">"translateX(0px)"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 關鍵影格 2</span></span><br><span class="line">  &#123;</span><br><span class="line">    transform: <span class="string">"translateX(600px) rotate(360deg)"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> colorAnimation = [</span><br><span class="line">  &#123;</span><br><span class="line">    backgroundColor: <span class="string">"#006064"</span>, <span class="comment">// background-color 改成 camelCase</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    backgroundColor: <span class="string">"#80deea"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>每一個關鍵影格都可以額外設定 offset 與 easing ，offset 即是他所佔的動畫時間（以小數表示百分比），easing 則是這一段動畫所使用的 Easing function，設定的方式與 animation-timing-function 相同。</p>
+<blockquote>
+<p>👆如果沒有指定 offset 的話，動畫時間會被平均分配。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> moveXAnimation = [</span><br><span class="line">  &#123; <span class="comment">// from</span></span><br><span class="line">    transform: <span class="string">"translateX(0px)"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">	&#123; <span class="comment">// 30%</span></span><br><span class="line">    transform: <span class="string">"translateX(300px) rotate(180deg)"</span>,</span><br><span class="line">		offset: <span class="number">0.3</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; <span class="comment">// to</span></span><br><span class="line">    transform: <span class="string">"translateX(600px) rotate(360deg)"</span>,</span><br><span class="line">		easing: <span class="string">'ease-out'</span></span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>第二種設定方式是以 property 為 key，定義出他的變化量：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> moveXAnimationAlter = &#123;</span><br><span class="line">  transform: [</span><br><span class="line">    <span class="string">'translateX(0px)'</span>, <span class="comment">// 0</span></span><br><span class="line">    <span class="string">'translateX(300px) rotate(1800deg)'</span>, <span class="comment">// 0.3</span></span><br><span class="line">    <span class="string">'translateX(600px) rotate(1800deg)'</span> <span class="comment">// 1</span></span><br><span class="line">	],</span><br><span class="line">	offset: [<span class="number">0</span>, <span class="number">0.3</span>],</span><br><span class="line">  easing: [ <span class="string">'ease-in'</span>, <span class="string">'ease-out'</span> ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h3><p>這裡的設定可以直接放動畫持續的時間（milliseconds），或是更細部的動畫設定，基本上就是 CSS3 Animations 那幾個 properties，我們熟悉的好朋友們：</p>
+<ul>
+<li>delay, endDelay</li>
+<li>direction</li>
+<li>duration</li>
+<li>easing（這邊的 easing 會蓋過 keyframes 裡面的設定）</li>
+<li>fill</li>
+<li>iterations</li>
+</ul>
+<hr>
+<h2 id="用-WAAPI-來解決痛點"><a href="#用-WAAPI-來解決痛點" class="headerlink" title="用 WAAPI 來解決痛點"></a>用 WAAPI 來解決痛點</h2><p>接下來，我們將前面的動畫用 WAAPI 來改寫，並想辦法解決 CSS Animation 使用上比較不方便的地方。</p>
+<h3 id="Replay"><a href="#Replay" class="headerlink" title="Replay"></a>Replay</h3><p>重新播放動畫對 WAAPI 來只是一塊蛋糕，畢竟他不是透過添加 Class 去執行動畫，因此沒有 Class 增減時的延遲問題，對 WAAPI 來說，執行動畫就僅是一個指令。</p>
+<iframe id="cp_embed_pozXLNJ" src="//codepen.io/anon/embed/pozXLNJ?height=300px&theme-id=dark&slug-hash=pozXLNJ&default-tab=result&embed-version=2" scrolling="no" frameborder="no" height="300px" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 70%; overflow: hidden;"></iframe>
+
+<h3 id="Chain-animations"><a href="#Chain-animations" class="headerlink" title="Chain animations"></a>Chain animations</h3><p>WAAPI 有提供一個叫作 finished 的方法，他是一個當動畫結束時會 resolve 的 Promise 物件，但目前<code>只有 FireFox 實作</code>。那如果想要在 Chrome 上使用怎麼辦呢？因為全部的動作都在 JavaScript 完成，因此我們也可以在動畫的 finish event 上動手。</p>
+<iframe id="cp_embed_eYOwrrj" src="//codepen.io/anon/embed/eYOwrrj?height=300px&theme-id=dark&slug-hash=eYOwrrj&default-tab=result&embed-version=2" scrolling="no" frameborder="no" height="300px" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 70%; overflow: hidden;"></iframe>
+
+<p>用 eventListener 的方式將動畫連結起來，這裡因為不希望他直接播放動畫，因此我們手動新增 Animation 物件，前面說過，Animation 物件就像是動畫的播放控制器，因此我們可以控制它什麼時候播放，以及相關的事件處理。</p>
+<iframe id="cp_embed_gOYNzKM" src="//codepen.io/anon/embed/gOYNzKM?height=300px&theme-id=dark&slug-hash=gOYNzKM&default-tab=result&embed-version=2" scrolling="no" frameborder="no" height="300px" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 70%; overflow: hidden;"></iframe>
+
+<h3 id="Programmable-parameters"><a href="#Programmable-parameters" class="headerlink" title="Programmable parameters"></a>Programmable parameters</h3><p>WAAPI 另一個讓人無法自拔的好處就是，由於環境都在 JS 中，因此能夠將 JavaScript 變數輕易地放入動畫參數中。也可以將其模組化，比起 CSS Animation 更加容易管理。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Animation creator</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createSlideInAnimation</span>(<span class="params">translating</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    transform: [<span class="string">`translateX: <span class="subst">$&#123;translating&#125;</span>px`</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>WAAPI 的討論從 2015 左右就開始了，由於瀏覽器支援度的關係，至今仍然不是一個適合被用在 product 的功能，不過有官方的 <a href="https://github.com/web-animations/web-animations-js" target="_blank" rel="noopener">polyfill</a> 可供使用。除了 WAAPI 之外，我也相當期待 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Motion_Path" target="_blank" rel="noopener">Motion Path</a> 這個功能，對於想寫一些簡易動畫又不想載入大量 library 的人來說是一大福音。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a href="https://css-tricks.com/comparison-animation-technologies/" target="_blank" rel="noopener">動畫技術的比較</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API" target="_blank" rel="noopener">WAAPI MDN</a></p>
+
+			</div>
+			<div class="p2 border-top">
+				<div class="clearfix">
+					<div class="left">
+						
+					</div>
+					<div class="ml2 right"><span class="h6 muted black">
+						<a class="link" href="/categories/Programming/">Programming</a>
+					 </span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="clearfix mt2">
+		
+		
+		<a href="/2019/09/27/TypeScriptExpress01/" class="right btn">
+			next: 用 TypeScript 寫 express — Route 與 Controller 篇
+			<svg class="icon" data-icon="chevron-right"></svg>
+		</a>
+		
+	</div>
+	
+	
+</div>
+
+
+			</div>
+		</div>
+	</section>
+	<div class="container mb2 clearfix">
+	<div class="sm-flex center nowrap mb2 h5">
+		<div class="flex-auto border-bottom">
+			<a href="https://hexo.io/" class="btn block muted">Hexo</a>
+		</div>
+		<div class="flex-auto border-bottom">
+			<a href="https://zllovesuki.git.sx/essays/2016/02/hexo-theme-weightless/" class="btn block">Weightless</a> Theme
+		</div>
+		<div class="flex-auto border-bottom">
+			Rocking <a href="http://www.basscss.com/" class="btn block">Basscss</a>
+		</div>
+		<div class="flex-auto border-bottom">
+			
+		</div>
+	</div>
+</div>
+<script src="/js/geomicons.js"></script>
+<script type="text/javascript">
+	var icons = document.querySelectorAll('[data-icon]');
+	geomicons.inject(icons);
+</script>
+
+
+	<!-- Piwik -->
+	<script type="text/javascript">
+	  var _paq = _paq || [];
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  _paq.push(['enableHeartBeatTimer', 10]);
+	  (function() {
+	    var u="//insidious.sdapi.net/";
+	    _paq.push(['setTrackerUrl', u+'piwik.php']);
+	    _paq.push(['setSiteId', 15]);
+	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<noscript><p><img src="//insidious.sdapi.net/piwik.php?idsite=15" style="border:0;" alt="" /></p></noscript>
+	<!-- End Piwik Code -->
+
+
+
+</body>
+</html>

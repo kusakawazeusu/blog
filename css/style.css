@@ -73,3 +73,8 @@ blockquote {
 .owl-media {
 	text-align: center;
 }
+
+.cp_embed_iframe {
+    display: block;
+    margin: 1em auto;
+}
