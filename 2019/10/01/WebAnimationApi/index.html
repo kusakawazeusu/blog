@@ -85,7 +85,7 @@
 <p>若我們需要手動 replay 動畫，這時候麻煩的地方就來了，我們得將 Class 移除後再加上去，而且還得用 setTimeout 來延遲（或是其他魔法）才行得通。</p>
 <iframe id="cp_embed_pozXLNJ" src="//codepen.io/anon/embed/pozXLNJ?height=300px&theme-id=dark&slug-hash=pozXLNJ&default-tab=result&embed-version=2" scrolling="no" frameborder="no" height="300px" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 70%; overflow: hidden;"></iframe>
 
-<p>另一個麻煩之處是複數動畫的狀況，若動畫是同時播放倒沒什麼問題，但要串接播放的話，我們就需要幫後面的動畫加上 animation-delay ，因為 CSS Animations 預設同時播放，若兩個動畫修改的 property 一樣，則後面的動畫會蓋過前面的動畫。</p>
+<p>另一個麻煩之處是複數動畫的狀況，若動畫是同時播放倒沒什麼問題，但要串接播放的話，我們就需要幫後面的動畫加上 animation-delay ，因為 CSS Animations 預設同時播放，若兩個動畫修改的 property 一樣，則後面的動畫會蓋過前面的動畫，因此我們還需要額外加上 animation-delay 才能將他們連結起來。兩個動畫倒還好，但動畫數量一旦變多，就要不斷重複計算各個動畫的 delay 值，也是一件累事。</p>
 <iframe id="cp_embed_YzKoawa" src="//codepen.io/anon/embed/YzKoawa?height=300px&theme-id=dark&slug-hash=YzKoawa&default-tab=result&embed-version=2" scrolling="no" frameborder="no" height="300px" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 70%; overflow: hidden;"></iframe>
 
 <hr>
