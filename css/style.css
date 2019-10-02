@@ -78,3 +78,15 @@ blockquote {
     display: block;
     margin: 1em auto;
 }
+
+.menu-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: scroll;
+}
+
+@media (min-width: 767px) {
+    .menu-list {
+        justify-content: center;
+    }
+}
