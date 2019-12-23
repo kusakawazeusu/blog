@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+	<meta charset="utf-8">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-149275612-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-149275612-1');
+	</script>
+
+	
+
+	<title>CS:APP 筆記 (一) - Hello, world 的奇幻旅程 | Kuan and the Elephant</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<meta name="robots" content="noindex,nofollow">
+
+	
+
+	
+	
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/css/normalize.css" type="text/css">
+	<link rel="stylesheet" href="/css/basscss.css" type="text/css">
+	<link rel="stylesheet" href="/css/basscss-ui-groups.css" type="text/css">
+	<link rel="stylesheet" href="/css/tomorrow.css" type="text/css">
+	<link rel="stylesheet" href="/css/style.css" type="text/css">
+	
+		<link href="https://rachel.objectstore.co/dist/fonts/lato-v13/lato-v13-all.css" rel="stylesheet" type="text/css">
+	
+	
+
+	<!--[if lt IE 9]><script src="/js/html5.js" type="text/javascript"></script><![endif]-->
+	<script src="/js/main.js" type="text/javascript"></script>
+</head>
+</html>
+<body>
+	<section class="container m4 clearfix">
+		<div class="clearfix">
+			<div class="mb4 sm-flex center nowrap">
+	<div class="flex-auto block">
+		<a href="/" class="btn button-narrow h2">Kuan and the Elephant</a>
+<!--		 | <small class="muted"></small>-->
+	</div>
+</div>
+
+			<div class="mn1 center menu-list">
+	<a target="_blank" href="https://kusakawazeusu.github.io/" class="btn button-narrow">Profile</a>
+
+	
+		<a href="/archives/" class="btn button-narrow">Archives</a>
+	
+
+	
+		<a href="/categories/Movie" class="btn button-narrow">Movie</a>
+	
+		<a href="/categories/Books" class="btn button-narrow">Books</a>
+	
+		<a href="/categories/Programming" class="btn button-narrow">Programming</a>
+	
+		<a href="/categories/Travel" class="btn button-narrow">Travel</a>
+	
+</div>
+
+			<div class="p0 col col-12">
+				<div class="m0 py2">
+  <div class="md-col-8 mx-auto">
+    <div class="overflow-hidden bg-white rounded">
+      <div class="m1 p2 white">
+        <div class="clearfix">
+          <div class="left">
+            <h1 class="h2 m0">
+              <a href="/2019/12/24/CSAPP-2/" class="black">
+                CS:APP 筆記 (一) - Hello, world 的奇幻旅程
+              </a>
+            </h1>
+          </div>
+          <div class="right">
+            <span class="h6 muted black">
+              Dec 24 2019
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="p2 border-top">
+        <p>這一章我們會走過程式從建立、編譯、執行到結束之間，應用程式、作業系統與電腦硬體究竟發生了哪些事情。</p>
+<h1 id="存在硬碟中的-Hello-world"><a href="#存在硬碟中的-Hello-world" class="headerlink" title="存在硬碟中的 Hello, world"></a>存在硬碟中的 Hello, world</h1><p>一般的開發流程中，我們會撰寫 Source code 並存放在硬碟裡，像是 C 語言這樣的高階語言是相當<strong>語意化</strong>的，更不用說像 Python、JavaScript 這些更晚出現的新語言，但大家也都瞭解，計算機系統只認得 0 與 1 ，而人類的文字與符號是多樣的，因此我們必須使用<strong>編碼</strong>來表示它們。</p>
+<p>對於大部分的程式來說（撇除<a href="https://buzzorange.com/techorange/2019/12/18/coding-in-ancient-chinese/" target="_blank" rel="noopener">文言文</a>跟<a href="https://zh.wikipedia.org/wiki/%E5%91%A8%E8%9F%92" target="_blank" rel="noopener">中文</a>寫程式的不算 ==），<strong>ASCII 編碼</strong>範圍已經足以表示所有可能的字元，包括數字、英文字母大小寫、符號，以及換行等特殊字元，像是換行（<code>\n</code>）轉換成十進位數字是 10。</p>
+<blockquote>
+<p>書上說「大部分電腦系統是以 <strong>ASCII 標準</strong>來表示文字字元」並非指 ASCII 編碼方式，因為現今大部分的 Editor 預設應為 UTF8 編碼，而 UTF8 是向下相容於 ASCII 編碼的，因此 UTF8 確實也是實作 ASCII 標準。</p>
+</blockquote>
+<p>所以我們讀起來是 <code>main</code>、<code>printf</code> 等 ⋯⋯ 和英文字彙，在電腦裡都是以被稱為<strong>位元（Bit）</strong>的 0、1 數字組合而成，而不只是我們寫的程式，在<strong>電腦系統中，無論是硬碟裡的資料，記憶體裡的程式，你在程式中分配的變數，以及網路傳遞的封包，所有的資訊都是由有序的位元組合而成。</strong></p>
+<blockquote>
+<p>關於編碼，第二章會詳細說明</p>
+</blockquote>
+<p>但如果有同樣兩組「有序位元組」的存在，該如何分辨他們之間的差別呢？唯一的方法就是透過上下文 (Context) 來做分別：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 0100 1000 0100 1001</span><br><span class="line">// 在 ASCII 中，表示的是 &apos;H&apos;, &apos;I&apos; 兩個字元</span><br><span class="line">// 在 C 的整數中，表示的是十進位的 18505</span><br><span class="line">// 在別的 context 中可能指的是一種指令</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="Before-Runtime-程式的編譯過程"><a href="#Before-Runtime-程式的編譯過程" class="headerlink" title="Before Runtime : 程式的編譯過程"></a>Before Runtime : 程式的編譯過程</h1><p>像 C、JAVA、C# 這樣的編譯語言 (Compiled Language) 都必須透過<strong>編譯</strong>這個過程：將人能讀懂的程式語言，經過數個步驟轉化成可執行的<strong>目標程式</strong> (Object Program)，並以二進位檔的方式儲存在硬碟中。</p>
+<blockquote>
+<p>任何儲存在電腦系統中的檔案，若不是文字檔 (Text file) 就是二進位檔 (Binary file)，差別在於一個存放的是文字，一個是二進位資料</p>
+</blockquote>
+<h2 id="GCC-的編譯步驟"><a href="#GCC-的編譯步驟" class="headerlink" title="GCC 的編譯步驟"></a>GCC 的編譯步驟</h2><p>GCC 全名 <strong>GNU Compiler Collection</strong>，在它甫推出之時，只能處理 C 語言，隨著眾開發者的努力，他現在能夠處理許多不同的程式語言，如 C++、JAVA、Go 等 ⋯</p>
+
+
+<p><em>Source Code</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">  printf(&quot;hello, world\n&quot;);</span><br><span class="line"></span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>完整的編譯指令，最後會產生可執行的目標程式</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o hello hello.c</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>前編譯</strong><br>處理程式中「#」開頭的程式，像是 <code>#include</code> 引入外部資源， <code>#define</code> 定義資料，這時產生的副檔名為文字檔 <code>.i</code></p>
+</li>
+<li><p><strong>編譯</strong><br>將前編譯產生的文字檔編譯成<strong>組合語言</strong>，你可以透過 gcc 下 -S 指令來產生這個檔案。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -S hello.c</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>組譯</strong><br>將編譯出來的組合語言，透過<strong>組譯器</strong>（同樣存在於 GNU 工具中）翻譯為低階機械語言，稱為<strong>目標程式</strong> <code>.o</code> (Relocatable object program)，在這個階段產生出來的已經是二進位檔了。</p>
+</li>
+<li><p><strong>連結</strong><br>組譯階段產生出來的目標程式僅包含的 main 函式，但我們寫程式時必定會用到來自函式庫 (Library) 的程式，像是 printf 就是存在於<strong>標準 C 函式庫</strong>的函式，在這個階段，Linker 會幫我們合併這些外部函式，並產生<strong>可執行的目標程式</strong> (Excutable object program)。</p>
+</li>
+</ul>
+<p>在編譯的流程完全結束後，我們就能夠執行這個程式：</p>
+
+
+<hr>
+<h1 id="During-Runtime-程式的執行過程"><a href="#During-Runtime-程式的執行過程" class="headerlink" title="During Runtime : 程式的執行過程"></a>During Runtime : 程式的執行過程</h1><h2 id="了解這些硬體代表的角色"><a href="#了解這些硬體代表的角色" class="headerlink" title="了解這些硬體代表的角色"></a>了解這些硬體代表的角色</h2>
+
+<p>要了解程式在執行過程中，我們電腦裡的硬體<strong>分別做了什麼事</strong>，我們必須先來認識一下這些角色，上面的圖是這些角色之間的關係，看起來有些複雜，但如果你都能記住冰與火之歌的角色關係了，這也只是一塊蛋糕而已，而且我們可以把它概括為<strong>四種角色</strong>：</p>
+<h3 id="匯流排-Bus"><a href="#匯流排-Bus" class="headerlink" title="匯流排 (Bus)"></a>匯流排 (Bus)</h3><p>匯流排負責在各個元件之間<strong>傳遞資料</strong>，匯流排的<strong>寬度</strong>是指它一次能夠傳遞多少個 bits ，這單位稱為 <em>word</em> <em>size_，在現今的系統中，_word size</em> 會是 4 Bytes (32 bits) 或是 8 Bytes (64 bits)<em>。</em></p>
+<h3 id="輸出-輸入裝置-I-O-devices"><a href="#輸出-輸入裝置-I-O-devices" class="headerlink" title="輸出/輸入裝置 (I/O devices)"></a>輸出/輸入裝置 (I/O devices)</h3><p>就如同它的名字所述，它是電腦與外部世界的連結，舉凡輸入裝置的鍵盤、滑鼠、麥克風，輸出的螢幕裝置，或是儲存資料使用的<strong>硬碟</strong>。</p>
+<h3 id="記憶體-Main-memory"><a href="#記憶體-Main-memory" class="headerlink" title="記憶體 (Main memory)"></a>記憶體 (Main memory)</h3><p>記憶體是程式執行與資料儲存時使用的<strong>暫時儲存空間</strong>，例如你在程式宣告的變數，或是你的呼叫函式時的 Call stack，都會儲存在這裡。邏輯上，我們能夠將記憶體視為<strong>一串存放 Bytes 的陣列</strong>，每個空間都有一個從 <strong>0 開始的唯一位址。</strong></p>
+<h3 id="處理器-Processor"><a href="#處理器-Processor" class="headerlink" title="處理器 (Processor)"></a>處理器 (Processor)</h3><p>眾所皆知的 CPU，它負責<strong>執行</strong>存放在記憶體中的指令，在它的暫存器中，有一個最重要的角色稱為<strong>程式計數器</strong> (Program Counter, PC) ，它負責指向下一個要執行的指令的記憶體位址，<strong>只要 CPU 是供電的狀態，處理器就會執處理程序式計數器指向的指令，並更新程式計數器讓他指向下一個指令</strong>。</p>
+<blockquote>
+<p><strong>暫存器</strong> (Register) 可以想像成處理器裡面的<strong>自有記憶體</strong>，儲存的空間非常小，但它的存取速度比記憶體快上許多。處理器中存在著<strong>各式不同功能</strong>的暫存器，例如：剛剛介紹的程式計數器存放指令位址，<strong>資料暫存器</strong>存放整數，<strong>浮點暫存器</strong>存放浮點數等 ⋯</p>
+</blockquote>
+<p>「指令」說起來似乎有點抽象，實際上到底是做了什麼事？就像我們寫程式時會下的陳述句 <code>x += 1</code> 一樣，但處理器實作的是較低階的<strong>指令集架構</strong> (Instruction set architecture)，舉例來說，他會做像是下面這些事：</p>
+<ul>
+<li><strong>載入</strong>：將資料從記憶體複製一份到暫存器</li>
+<li><strong>儲存</strong>：將資料從暫存器複製一份到記憶體的某個位址</li>
+<li><strong>計算</strong>：將數個暫存器的資料複製到算術單元 (ALU) 中，並將結果存放到暫存器</li>
+<li><strong>JUMP</strong>：將資料複製到程式計數器（接下來會執行這個指令）</li>
+</ul>
+<h2 id="執行-hello-程式"><a href="#執行-hello-程式" class="headerlink" title="執行 hello 程式"></a>執行 hello 程式</h2><p>介紹完上面的硬體角色，我們現在來實際跑一次 hello 程式：</p>
+<ol>
+<li>從鍵盤輸入 <code>./hello</code>，終端機將讀入的每一個字元<strong>複製到暫存器</strong>，再將字元從<strong>暫存器複製到記憶體中</strong></li>
+<li>當我們按下 Enter，終端機解析了這一個字串，並開始執行 hello 程式</li>
+<li>終端機執行一系列的指令：將 hello 程式的<strong>程式碼</strong>與<strong>資料</strong>從硬碟複製到記憶體，資料的內容包括 <code>hello, world</code> 字串</li>
+<li><strong>處理器</strong>接著執行 hello 程式中，main 函式裡的指令，包括將 <code>hello, world</code> 字串從<strong>記憶體</strong>複製到暫存器中，並送到<strong>輸出裝置</strong> (螢幕)</li>
+</ol>
+<h2 id="快取記憶體與記憶體階層"><a href="#快取記憶體與記憶體階層" class="headerlink" title="快取記憶體與記憶體階層"></a>快取記憶體與記憶體階層</h2><p>看了上面的步驟簡述，最常出現的動詞是什麼呢？就是「複製」，或是說<strong>「把資料從 A 移動到 B」</strong>的動作，電腦系統把許多時間花費在這件事情上，尤其若牽涉到硬碟，<strong>存取的時間</strong>要比暫存器和記憶體多上許多。</p>
+<p>呃，不知道大家會不會在床旁邊打造自己的「一日生活圈」，就是把常用的東西，像是鬧鐘、手機、電視遙控器都擺在伸手可碰的距離，這是因為<strong>覺得自己很常花時間起床去拿這些東西，所以才乾脆把它擺在床旁邊，以減少起床拿東西再上床的頻率</strong>。（aka 懶）</p>
+<p>沒錯，我們很常聽到的快取 (Cache) 也是同樣的道理，系統設計師在 CPU 裡規劃了快取記憶體來儲存資料，在需要存取資料時，會先檢查快取記憶體，若快取裡面有資料，就可以不用到記憶體去拿了。</p>
+<p>通常快取記憶體會有兩層，最接近暫存器的稱為 L1，它的<strong>存取速度和暫存器幾乎一樣快</strong>，再往上則是 L2，存取速度雖然比 L1 慢，但<strong>速度仍然比記憶體快上五倍</strong>，且儲存的空間也比 L1 大，現代處理器會有 L3，則以此類推（比記憶體快但比 L2 慢)。</p>
+
+
+<p>快取的意義在於將<strong>高成本的查詢結果儲存起來</strong>，這一點在後端程式開發也是必須的，對於減少伺服器的負載有很大的幫助，系統會透過<strong>局限性</strong> (Locality) 來判斷這個資料是否複製到快取記憶體：</p>
+<ul>
+<li><strong>時間局限性</strong>：最近存取過的資料</li>
+<li><strong>空間局限性</strong>：最近存取資料的相鄰記憶體空間（如陣列）</li>
+</ul>
+<p>快取 (Cache) 的概念是<strong>相對性</strong>的，每一層的記憶體都是它下一層的快取，像是暫存器是快取記憶體的快取，而<strong>硬碟也是遠端存取資料的快取</strong>，舉例來說，我們會將成本較高的 Web API 回傳的資料儲存在資料庫中，在資料庫有資料的狀況下，可以省下呼叫 API 的時間。（當然，這邊要依據資料改變的情境來設計）</p>
+<h2 id="系統公道伯-作業系統"><a href="#系統公道伯-作業系統" class="headerlink" title="系統公道伯 - 作業系統"></a>系統公道伯 - 作業系統</h2><p>在上述 hello 程式執行的步驟中，雖然我們的程式看似天生神力，能夠直接讀取鍵盤、顯示字串到螢幕上，但其實<strong>任何對硬體的操作都還是得先經過作業系統 (Operating System, OS) 才行</strong>，它就像是硬體與軟體之間的協調者。</p>
+<p>作業系統主要的目的為：</p>
+<ol>
+<li>保護硬體不被軟體濫用</li>
+<li>提供統一的操作介面給軟體使用</li>
+</ol>
+<p>為了達到上述目的，OS 提供了三個<strong>抽象</strong>概念：</p>
+<ul>
+<li>處理程序 (Process)</li>
+<li>虛擬記憶體 (Virtual Memory)</li>
+<li>檔案 (File)</li>
+</ul>
+<h3 id="處理程序"><a href="#處理程序" class="headerlink" title="處理程序"></a>處理程序</h3><p>既然處理器一次只能處理一個指令 (在單核的狀況下)，那麼我們的作業系統是如何在電腦中同時「跑」這麼多程式呢？</p>
+<p>歸功於<strong>處理程序</strong>這個將程式抽象化的概念，作業系統會管理<strong>每個處理程序執行所需要的資訊</strong>，像是暫存器裡的資料、程式計數器指向的位址、記憶體裡的資料，這些我們稱為 <strong>Context</strong>。</p>
+<p><strong>當作業系統要將控制權轉移到另一個處理程序時，就會發生 Context Switch</strong>，作業系統會幫我們把這些 Context 儲存起來，並建立新的 Context，未來若控制權回到這個處理程序時，就可以把載入已儲存的 Context，因此程式的狀態不會被中斷。</p>
+<blockquote>
+<p>有點像是你跟你哥輪流打電動，然後你們每次換人玩之前都會存檔，於是無論手把交給誰，他都能夠從上次的進度開始玩，如果你們轉換（Context Switch）的頻率夠快的話（可能接近 1/24 秒吧），看起來就會像是你跟你哥同時打電動。</p>
+</blockquote>
+<p>負責管理處理程序轉換的程式稱為作業系統的 <strong>kernel</strong>，kernel 並不是一個處理程序，而是永遠存在於記憶體裡面的程式。當應用程式需要作業系統幫它操作硬體時，它就會發出 <strong>system call</strong>，將控制權交給 kernel 並完成這個請求。</p>
+<h3 id="虛擬記憶體-Virtual-Memory"><a href="#虛擬記憶體-Virtual-Memory" class="headerlink" title="虛擬記憶體 (Virtual Memory)"></a>虛擬記憶體 (Virtual Memory)</h3><img src="/2019/12/24/CSAPP-2/memory.png">
+
+<p>作業系統像劃地一樣，將記憶體依照用途劃分為不同的區塊，稱為<strong>虛擬記憶體空間</strong> (Virtual memory space)。</p>
+<ul>
+<li><p><strong>程式碼與資料</strong>：每個處理程序的起點是同樣一個固定的記憶體位址，像是程式宣告變數的資料會儲存在這，這個區塊的大小在編譯階段就能得知</p>
+</li>
+<li><p><strong>Heap</strong>：程式在 runtime 時搜集 (malloc) 和釋放 (free) 的記憶體，因為是執行時才產生，因此不像上面的資料是固定大小</p>
+</li>
+<li><p><strong>共享資源庫</strong>：在連結 (Linking) 階段產生</p>
+</li>
+<li><p><strong>Stack</strong>：處理程序的 call stack，因為也是在執行時產生，因此大小非固定</p>
+</li>
+<li><p><strong>Kernel 虛擬記憶體</strong>：永遠會在最上方的區塊，當應用程式需要作業系統的幫忙時，可以呼叫 Kernel 程式（像是讀寫檔案、轉換處理程序的控制權）</p>
+</li>
+</ul>
+<p>透過虛擬記憶體，處理程序在持有控制權時，就像「獨佔」了整塊記憶體，而在控制權轉移時，這些處理程序資料會被作業系統儲存起來，以便後續控制權轉回這個處理程序時，能夠恢復原本的狀態。</p>
+
+      </div>
+      <hr />
+      <div class="p2">
+        <h3 class="h3">喜歡這篇文章嗎？</h3>
+        <p>歡迎點擊按鈕分享到 Facebook 上唷！</p>
+        <div class="fb-share-button" data-href="/2019/12/24/CSAPP-2/" data-layout="button" size="large"></div>
+      </div>
+
+      <div class="p2 border-top">
+        <div class="clearfix">
+          <div class="left">
+            
+          </div>
+          <div class="ml2 right">
+            <span class="h6 muted black">
+              
+              <a class="link" href="/categories/Books/">Books</a> 
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  DISQUS	-->
+  
+  <div class="md-col-10 mx-auto mt2">
+    <div class="overflow-hidden bg-white rounded">
+      <div class="m1 p2 white">
+        <div id="disqus_thread"></div>
+        <script>
+          var disqus_shortname = 'kuan-and-the-elephant'
+          ;(function() {
+            // DON'T EDIT BELOW THIS LINE
+            var d = document,
+              s = d.createElement('script')
+
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+
+            s.setAttribute('data-timestamp', +new Date())
+            ;(d.head || d.body).appendChild(s)
+          })()
+        </script>
+        <noscript
+          >Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript
+        >
+      </div>
+    </div>
+  </div>
+   
+  <div class="clearfix mt2">
+     
+    <a href="/2019/12/24/CSAPP-1/" class="right btn">
+      next: CS:APP 筆記 - 為什麼我選了這本書
+      <svg class="icon" data-icon="chevron-right"></svg>
+    </a>
+    
+  </div>
+  
+
+  <!--  FACEBOOK PLUGIN	-->
+  <div id="fb-root"></div>
+  <script>
+    ;(function(d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0]
+      if (d.getElementById(id)) return
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0'
+      fjs.parentNode.insertBefore(js, fjs)
+    })(document, 'script', 'facebook-jssdk')
+  </script>
+</div>
+
+
+			</div>
+		</div>
+	</section>
+	<div class="container mb2 clearfix">
+	<div class="sm-flex center nowrap mb2 h5">
+		<div class="flex-auto border-bottom">
+			<a href="https://hexo.io/" class="btn block muted">Hexo</a>
+		</div>
+		<div class="flex-auto border-bottom">
+			<a href="https://zllovesuki.git.sx/essays/2016/02/hexo-theme-weightless/" class="btn block">Weightless</a> Theme
+		</div>
+		<div class="flex-auto border-bottom">
+			Rocking <a href="http://www.basscss.com/" class="btn block">Basscss</a>
+		</div>
+		<div class="flex-auto border-bottom">
+			
+		</div>
+	</div>
+</div>
+<script src="/js/geomicons.js"></script>
+<script type="text/javascript">
+	var icons = document.querySelectorAll('[data-icon]');
+	geomicons.inject(icons);
+</script>
+
+
+	<!-- Piwik -->
+	<script type="text/javascript">
+	  var _paq = _paq || [];
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  _paq.push(['enableHeartBeatTimer', 10]);
+	  (function() {
+	    var u="//insidious.sdapi.net/";
+	    _paq.push(['setTrackerUrl', u+'piwik.php']);
+	    _paq.push(['setSiteId', 15]);
+	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<noscript><p><img src="//insidious.sdapi.net/piwik.php?idsite=15" style="border:0;" alt="" /></p></noscript>
+	<!-- End Piwik Code -->
+
+
+
+</body>
+</html>
