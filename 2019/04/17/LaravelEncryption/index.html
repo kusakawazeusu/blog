@@ -67,22 +67,26 @@
 
 			<div class="p0 col col-12">
 				<div class="m0 py2">
-	<div class="md-col-10 mx-auto">
-		<div class="overflow-hidden bg-white rounded">
-			<div class="m1 p2 white">
-				<div class="clearfix">
-					<div class="left">
-						<h1 class="h2 m0"><a href="/2019/04/17/LaravelEncryption/" class="black">
-						Laravel Encryption 和一些密碼學筆記
-						</a></h1>
-					</div>
-					<div class="right"><span class="h6 muted black">
-						Apr 17 2019
-					</span></div>
-				</div>
-			</div>
-			<div class="p2 border-top">
-				<p>如果你的系統有加密敏感資料的需求，Laravel Encryptor 提供了一個非常友善的介面，同時也應用了足夠強度的演算法。這篇文章會一邊說明 Laravel 加解密資料的過程，並佐一些密碼學的筆記。</p>
+  <div class="md-col-8 mx-auto">
+    <div class="overflow-hidden bg-white rounded">
+      <div class="m1 p2 white">
+        <div class="clearfix">
+          <div class="left">
+            <h1 class="h2 m0">
+              <a href="/2019/04/17/LaravelEncryption/" class="black">
+                Laravel Encryption 和一些密碼學筆記
+              </a>
+            </h1>
+          </div>
+          <div class="right">
+            <span class="h6 muted black">
+              Apr 17 2019
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="p2 border-top">
+        <p>如果你的系統有加密敏感資料的需求，Laravel Encryptor 提供了一個非常友善的介面，同時也應用了足夠強度的演算法。這篇文章會一邊說明 Laravel 加解密資料的過程，並佐一些密碼學的筆記。</p>
 <a id="more"></a>
 
 <h2 id="實際應用-Encrypter"><a href="#實際應用-Encrypter" class="headerlink" title="實際應用 Encrypter"></a>實際應用 Encrypter</h2><p>假設你需要在註冊時加密使用者的身份證字號，於是在 Application 層級做加密，儲存進 database 時是密文，但在後台編輯的時候需要看到明文，我們可以用 Laravel 提供的 <code>Model Mutator</code> 和 <code>Accessor</code> 來方便地實作。</p>
@@ -139,84 +143,85 @@
 <li><a href="https://laravel.com/docs/5.8/encryption" target="_blank" rel="noopener">https://laravel.com/docs/5.8/encryption</a></li>
 </ul>
 
-			</div>
-			<hr>
-			<div class="p2">
-				<h3 class="h3">喜歡這篇文章嗎？</h3>
-				<p>歡迎點擊按鈕分享到 Facebook 上唷！</p>
-				<div class="fb-share-button"
-					 data-href="/2019/04/17/LaravelEncryption/"
-					 data-layout="button"
-					 size="large">
-				</div>
-			</div>
+      </div>
+      <hr />
+      <div class="p2">
+        <h3 class="h3">喜歡這篇文章嗎？</h3>
+        <p>歡迎點擊按鈕分享到 Facebook 上唷！</p>
+        <div class="fb-share-button" data-href="/2019/04/17/LaravelEncryption/" data-layout="button" size="large"></div>
+      </div>
 
-			<div class="p2 border-top">
-				<div class="clearfix">
-					<div class="left">
-						
-					</div>
-					<div class="ml2 right">
-						<span class="h6 muted black">
-							
-								<a class="link" href="/categories/Programming/">Programming</a>
-							
-						</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+      <div class="p2 border-top">
+        <div class="clearfix">
+          <div class="left">
+            
+          </div>
+          <div class="ml2 right">
+            <span class="h6 muted black">
+              
+              <a class="link" href="/categories/Programming/">Programming</a> 
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-	<!--  DISQUS	-->
-	
-		<div class="md-col-10 mx-auto mt2">
-			<div class="overflow-hidden bg-white rounded">
-				<div class="m1 p2 white">
-					<div id="disqus_thread"></div>
-					<script>
-						var disqus_shortname = 'kuan-and-the-elephant';
-						(function() {  // DON'T EDIT BELOW THIS LINE
-							var d = document, s = d.createElement('script');
+  <!--  DISQUS	-->
+  
+  <div class="md-col-10 mx-auto mt2">
+    <div class="overflow-hidden bg-white rounded">
+      <div class="m1 p2 white">
+        <div id="disqus_thread"></div>
+        <script>
+          var disqus_shortname = 'kuan-and-the-elephant'
+          ;(function() {
+            // DON'T EDIT BELOW THIS LINE
+            var d = document,
+              s = d.createElement('script')
 
-							s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js'
 
-							s.setAttribute('data-timestamp', +new Date());
-							(d.head || d.body).appendChild(s);
-						})();
-					</script>
-					<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-				</div>
-			</div>
-		</div>
-	
+            s.setAttribute('data-timestamp', +new Date())
+            ;(d.head || d.body).appendChild(s)
+          })()
+        </script>
+        <noscript
+          >Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript
+        >
+      </div>
+    </div>
+  </div>
+   
+  <div class="clearfix mt2">
+    
+    <a href="/2019/08/13/ReactNativeBlePlx/" class="left btn">
+      <svg class="icon" data-icon="chevron-left"></svg>
+      prev: 用 react-native-ble-plx 來和 BLE Peripheral 互動
+    </a>
+     
+    <a href="/2019/04/16/InTaiwan/" class="right btn">
+      next: 《我們的青春，在臺灣》 - 有痛，然後才有青春
+      <svg class="icon" data-icon="chevron-right"></svg>
+    </a>
+    
+  </div>
+  
 
-	
-	<div class="clearfix mt2">
-		
-			<a href="/2019/08/13/ReactNativeBlePlx/" class="left btn">
-			<svg class="icon" data-icon="chevron-left"></svg>
-			prev: 用 react-native-ble-plx 來和 BLE Peripheral 互動
-		</a>
-		
-		
-		<a href="/2019/04/16/InTaiwan/" class="right btn">
-			next: 《我們的青春，在臺灣》 - 有痛，然後才有青春
-			<svg class="icon" data-icon="chevron-right"></svg>
-		</a>
-		
-	</div>
-	
-
-	<!--  FACEBOOK PLUGIN	-->
-	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));</script>
+  <!--  FACEBOOK PLUGIN	-->
+  <div id="fb-root"></div>
+  <script>
+    ;(function(d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0]
+      if (d.getElementById(id)) return
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0'
+      fjs.parentNode.insertBefore(js, fjs)
+    })(document, 'script', 'facebook-jssdk')
+  </script>
 </div>
 
 

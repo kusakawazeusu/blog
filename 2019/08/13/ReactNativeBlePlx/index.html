@@ -67,22 +67,26 @@
 
 			<div class="p0 col col-12">
 				<div class="m0 py2">
-	<div class="md-col-10 mx-auto">
-		<div class="overflow-hidden bg-white rounded">
-			<div class="m1 p2 white">
-				<div class="clearfix">
-					<div class="left">
-						<h1 class="h2 m0"><a href="/2019/08/13/ReactNativeBlePlx/" class="black">
-						用 react-native-ble-plx 來和 BLE Peripheral 互動
-						</a></h1>
-					</div>
-					<div class="right"><span class="h6 muted black">
-						Aug 13 2019
-					</span></div>
-				</div>
-			</div>
-			<div class="p2 border-top">
-				<img src="/2019/08/13/ReactNativeBlePlx/01.jpeg">
+  <div class="md-col-8 mx-auto">
+    <div class="overflow-hidden bg-white rounded">
+      <div class="m1 p2 white">
+        <div class="clearfix">
+          <div class="left">
+            <h1 class="h2 m0">
+              <a href="/2019/08/13/ReactNativeBlePlx/" class="black">
+                用 react-native-ble-plx 來和 BLE Peripheral 互動
+              </a>
+            </h1>
+          </div>
+          <div class="right">
+            <span class="h6 muted black">
+              Aug 13 2019
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="p2 border-top">
+        <img src="/2019/08/13/ReactNativeBlePlx/01.jpeg">
 
 <h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>最近在做一個 BLE（低功耗藍牙） 的 APP 案，從開發工具選擇、研究到實作中間花了一些時間，也踩了許多對 BLE 知識不夠所產生的雷。在開發第一版時，對裝置的連線總是特別慢，而且找不出什麼原因，上了好多討論版發問但得到的回答甚少，我甚至拋棄 React native 跑去怒學 Kotlin 實作一個 demo，但也沒解決問題，後來怎麼解決呢？換了一個藍牙晶片後走路跟飛的一樣，這件事也大大加深了我對「硬體好可怕」的既定印象 😭。</p>
 <a id="more"></a>
@@ -202,84 +206,85 @@
 <li><strong>在連線前，請記得要先 stopDeviceScan，在 Android 系統中有可能出 Bug</strong><br>以上是與 BLE 裝置連線操作的一些小心得，若有任何錯誤或疑惑的部分，歡迎留言討論。</li>
 </ul>
 
-			</div>
-			<hr>
-			<div class="p2">
-				<h3 class="h3">喜歡這篇文章嗎？</h3>
-				<p>歡迎點擊按鈕分享到 Facebook 上唷！</p>
-				<div class="fb-share-button"
-					 data-href="/2019/08/13/ReactNativeBlePlx/"
-					 data-layout="button"
-					 size="large">
-				</div>
-			</div>
+      </div>
+      <hr />
+      <div class="p2">
+        <h3 class="h3">喜歡這篇文章嗎？</h3>
+        <p>歡迎點擊按鈕分享到 Facebook 上唷！</p>
+        <div class="fb-share-button" data-href="/2019/08/13/ReactNativeBlePlx/" data-layout="button" size="large"></div>
+      </div>
 
-			<div class="p2 border-top">
-				<div class="clearfix">
-					<div class="left">
-						
-					</div>
-					<div class="ml2 right">
-						<span class="h6 muted black">
-							
-								<a class="link" href="/categories/Programming/">Programming</a>
-							
-						</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+      <div class="p2 border-top">
+        <div class="clearfix">
+          <div class="left">
+            
+          </div>
+          <div class="ml2 right">
+            <span class="h6 muted black">
+              
+              <a class="link" href="/categories/Programming/">Programming</a> 
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-	<!--  DISQUS	-->
-	
-		<div class="md-col-10 mx-auto mt2">
-			<div class="overflow-hidden bg-white rounded">
-				<div class="m1 p2 white">
-					<div id="disqus_thread"></div>
-					<script>
-						var disqus_shortname = 'kuan-and-the-elephant';
-						(function() {  // DON'T EDIT BELOW THIS LINE
-							var d = document, s = d.createElement('script');
+  <!--  DISQUS	-->
+  
+  <div class="md-col-10 mx-auto mt2">
+    <div class="overflow-hidden bg-white rounded">
+      <div class="m1 p2 white">
+        <div id="disqus_thread"></div>
+        <script>
+          var disqus_shortname = 'kuan-and-the-elephant'
+          ;(function() {
+            // DON'T EDIT BELOW THIS LINE
+            var d = document,
+              s = d.createElement('script')
 
-							s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js'
 
-							s.setAttribute('data-timestamp', +new Date());
-							(d.head || d.body).appendChild(s);
-						})();
-					</script>
-					<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-				</div>
-			</div>
-		</div>
-	
+            s.setAttribute('data-timestamp', +new Date())
+            ;(d.head || d.body).appendChild(s)
+          })()
+        </script>
+        <noscript
+          >Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript
+        >
+      </div>
+    </div>
+  </div>
+   
+  <div class="clearfix mt2">
+    
+    <a href="/2019/09/27/TypeScriptExpress01/" class="left btn">
+      <svg class="icon" data-icon="chevron-left"></svg>
+      prev: 用 TypeScript 寫 express — Route 與 Controller 篇
+    </a>
+     
+    <a href="/2019/04/17/LaravelEncryption/" class="right btn">
+      next: Laravel Encryption 和一些密碼學筆記
+      <svg class="icon" data-icon="chevron-right"></svg>
+    </a>
+    
+  </div>
+  
 
-	
-	<div class="clearfix mt2">
-		
-			<a href="/2019/09/27/TypeScriptExpress01/" class="left btn">
-			<svg class="icon" data-icon="chevron-left"></svg>
-			prev: 用 TypeScript 寫 express — Route 與 Controller 篇
-		</a>
-		
-		
-		<a href="/2019/04/17/LaravelEncryption/" class="right btn">
-			next: Laravel Encryption 和一些密碼學筆記
-			<svg class="icon" data-icon="chevron-right"></svg>
-		</a>
-		
-	</div>
-	
-
-	<!--  FACEBOOK PLUGIN	-->
-	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));</script>
+  <!--  FACEBOOK PLUGIN	-->
+  <div id="fb-root"></div>
+  <script>
+    ;(function(d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0]
+      if (d.getElementById(id)) return
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0'
+      fjs.parentNode.insertBefore(js, fjs)
+    })(document, 'script', 'facebook-jssdk')
+  </script>
 </div>
 
 
