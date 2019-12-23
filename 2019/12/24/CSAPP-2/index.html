@@ -107,7 +107,7 @@
 <p>任何儲存在電腦系統中的檔案，若不是文字檔 (Text file) 就是二進位檔 (Binary file)，差別在於一個存放的是文字，一個是二進位資料</p>
 </blockquote>
 <h2 id="GCC-的編譯步驟"><a href="#GCC-的編譯步驟" class="headerlink" title="GCC 的編譯步驟"></a>GCC 的編譯步驟</h2><p>GCC 全名 <strong>GNU Compiler Collection</strong>，在它甫推出之時，只能處理 C 語言，隨著眾開發者的努力，他現在能夠處理許多不同的程式語言，如 C++、JAVA、Go 等 ⋯</p>
-
+<img src="/2019/12/24/CSAPP-2/2.png">
 
 <p><em>Source Code</em></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">  printf(&quot;hello, world\n&quot;);</span><br><span class="line"></span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -130,10 +130,10 @@
 </li>
 </ul>
 <p>在編譯的流程完全結束後，我們就能夠執行這個程式：</p>
-
+<img src="/2019/12/24/CSAPP-2/1.png">
 
 <hr>
-<h1 id="During-Runtime-程式的執行過程"><a href="#During-Runtime-程式的執行過程" class="headerlink" title="During Runtime : 程式的執行過程"></a>During Runtime : 程式的執行過程</h1><h2 id="了解這些硬體代表的角色"><a href="#了解這些硬體代表的角色" class="headerlink" title="了解這些硬體代表的角色"></a>了解這些硬體代表的角色</h2>
+<h1 id="During-Runtime-程式的執行過程"><a href="#During-Runtime-程式的執行過程" class="headerlink" title="During Runtime : 程式的執行過程"></a>During Runtime : 程式的執行過程</h1><h2 id="了解這些硬體代表的角色"><a href="#了解這些硬體代表的角色" class="headerlink" title="了解這些硬體代表的角色"></a>了解這些硬體代表的角色</h2><img src="/2019/12/24/CSAPP-2/3.png">
 
 <p>要了解程式在執行過程中，我們電腦裡的硬體<strong>分別做了什麼事</strong>，我們必須先來認識一下這些角色，上面的圖是這些角色之間的關係，看起來有些複雜，但如果你都能記住冰與火之歌的角色關係了，這也只是一塊蛋糕而已，而且我們可以把它概括為<strong>四種角色</strong>：</p>
 <h3 id="匯流排-Bus"><a href="#匯流排-Bus" class="headerlink" title="匯流排 (Bus)"></a>匯流排 (Bus)</h3><p>匯流排負責在各個元件之間<strong>傳遞資料</strong>，匯流排的<strong>寬度</strong>是指它一次能夠傳遞多少個 bits ，這單位稱為 <em>word</em> <em>size_，在現今的系統中，_word size</em> 會是 4 Bytes (32 bits) 或是 8 Bytes (64 bits)<em>。</em></p>
@@ -161,7 +161,7 @@
 <p>呃，不知道大家會不會在床旁邊打造自己的「一日生活圈」，就是把常用的東西，像是鬧鐘、手機、電視遙控器都擺在伸手可碰的距離，這是因為<strong>覺得自己很常花時間起床去拿這些東西，所以才乾脆把它擺在床旁邊，以減少起床拿東西再上床的頻率</strong>。（aka 懶）</p>
 <p>沒錯，我們很常聽到的快取 (Cache) 也是同樣的道理，系統設計師在 CPU 裡規劃了快取記憶體來儲存資料，在需要存取資料時，會先檢查快取記憶體，若快取裡面有資料，就可以不用到記憶體去拿了。</p>
 <p>通常快取記憶體會有兩層，最接近暫存器的稱為 L1，它的<strong>存取速度和暫存器幾乎一樣快</strong>，再往上則是 L2，存取速度雖然比 L1 慢，但<strong>速度仍然比記憶體快上五倍</strong>，且儲存的空間也比 L1 大，現代處理器會有 L3，則以此類推（比記憶體快但比 L2 慢)。</p>
-
+<img src="/2019/12/24/CSAPP-2/4.png">
 
 <p>快取的意義在於將<strong>高成本的查詢結果儲存起來</strong>，這一點在後端程式開發也是必須的，對於減少伺服器的負載有很大的幫助，系統會透過<strong>局限性</strong> (Locality) 來判斷這個資料是否複製到快取記憶體：</p>
 <ul>
