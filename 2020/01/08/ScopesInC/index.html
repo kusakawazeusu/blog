@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149275612-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-149275612-1");
+    </script>
+
+    
+
+    <title>K&amp;R C 讀書筆記 - Scope rule in C | Kuan and the Elephant</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <meta name="robots" content="index">
+
+      
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/normalize.css" type="text/css">
+    <link rel="stylesheet" href="/css/basscss.css" type="text/css">
+    <link rel="stylesheet" href="/css/basscss-ui-groups.css" type="text/css">
+    <link rel="stylesheet" href="/css/tomorrow.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    
+    <link href="https://rachel.objectstore.co/dist/fonts/lato-v13/lato-v13-all.css" rel="stylesheet" type="text/css">
+     
+
+    <!--[if lt IE 9
+      ]><script
+        src="/js/html5.js"
+        type="text/javascript"
+      ></script
+    ><![endif]-->
+    <script src="/js/main.js" type="text/javascript"></script>
+  </head>
+</html>
+
+<body>
+	<section class="container m4 clearfix">
+		<div class="clearfix">
+			<div class="mb4 sm-flex center nowrap">
+	<div class="flex-auto block">
+		<a href="/" class="btn button-narrow h2">Kuan and the Elephant</a>
+<!--		 | <small class="muted"></small>-->
+	</div>
+</div>
+
+			<div class="mn1 center menu-list">
+	<a target="_blank" href="https://kusakawazeusu.github.io/" class="btn button-narrow">Profile</a>
+
+	
+		<a href="/archives/" class="btn button-narrow">Archives</a>
+	
+
+	
+		<a href="/categories/Movie" class="btn button-narrow">Movie</a>
+	
+		<a href="/categories/Books" class="btn button-narrow">Books</a>
+	
+		<a href="/categories/Programming" class="btn button-narrow">Programming</a>
+	
+		<a href="/categories/Travel" class="btn button-narrow">Travel</a>
+	
+		<a href="/categories/Book" class="btn button-narrow">Book</a>
+	
+</div>
+
+			<div class="p0 col col-12">
+				<div class="m0 py2">
+  <div class="md-col-8 mx-auto">
+    <div class="overflow-hidden bg-white rounded">
+      <div class="m1 p2 white">
+        <div class="clearfix">
+          <div class="left">
+            <h1 class="h2 m0">
+              <a href="/2020/01/08/ScopesInC/" class="black">
+                K&R C 讀書筆記 - Scope rule in C
+              </a>
+            </h1>
+          </div>
+          <div class="right">
+            <span class="h6 muted black">
+              Jan 8 2020
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="p2 border-top">
+        <p>CS:APP 看到一半，覺得自己對 C 語言的一知半解似乎加深了要理解這本書的成本，因此決定先去把 K&amp;R C 看完，前面幾個章節大多是語法就速速複習，但到了 Program structure 這章就開始卡關，尤其是 static 那與其他程式語言不同的定義，K&amp;R C 在這一段似乎也沒有著墨太深，所以整理一下資料。</p>
+<a id="more"></a>
+
+<h2 id="自動變數-Automatic-variable"><a href="#自動變數-Automatic-variable" class="headerlink" title="自動變數 (Automatic variable)"></a>自動變數 (Automatic variable)</h2><p>自動變數是指進入作用域 (scope) 後，會自動分配空間，離開作用域後會自動釋放空間的變數，像是函式裡面的局部變數。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> numbers[], <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> i, sum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">    sum += numbers[i];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在這裡面 <code>i</code>, <code>sum</code> 都是自動變數，他們的作用域<strong>從宣告開始，直到函式結束</strong>，出了 <code>add</code> 函式後變無法再存取這些變數。即使在不同的函式中宣告了同樣名字的變數也不會出錯，這些變數也無任何關聯。</p>
+<h2 id="全域變數-Global-variable"><a href="#全域變數-Global-variable" class="headerlink" title="全域變數 (Global variable)"></a>全域變數 (Global variable)</h2><p>用一般方式定義在函式外面的變數，能夠被任何函式存取，稱為<strong>全域變數</strong>。另外，由於 C 語言內無法在函式裡面定義函式，因此所有非 static 函式都是全域的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> length = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> numbers[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> i, sum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">    sum += numbers[i];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>::在同一個 Scope 中，C 語言的 Symbol 是不能重複的，因此若變數或函式重複定義，在編譯過程中會產生錯誤。::</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"data.h"</span></span></span><br><span class="line"><span class="keyword">int</span> length = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d"</span>, length);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// data.h</span></span><br><span class="line"><span class="keyword">int</span> length = <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+
+<p>由於 length 被重複定義，編譯過程會產生錯誤。</p>
+<h2 id="Definition-vs-Declaration"><a href="#Definition-vs-Declaration" class="headerlink" title="Definition vs Declaration"></a>Definition vs Declaration</h2><p><strong>宣告(Declaration)</strong>是指在程式中宣告<strong>標示符名稱</strong>以及<strong>資料型態</strong>，無論是變數、函式、物件皆是。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Examples of declaration</span></span><br><span class="line"><span class="keyword">int</span> i;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> numbers[])</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定義 (Definition)</strong> 是指在做宣告標示符的同時賦予其值 (或實作它)，因此你在定義時也同時做了宣告。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Examples of definition</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">10</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>宣告與定義可以一起寫，也可以分開寫，所以在過去的課堂上，我們被建議要將函式與變數的宣告寫在標頭檔 (header, .h) 之中，並把實作寫在 .c 裡面。在 C 語言中，多次宣告不會出事，但同一個標示符<strong>只能被定義一次</strong>。</p>
+<h2 id="外部變數-External-variable"><a href="#外部變數-External-variable" class="headerlink" title="外部變數 (External variable)"></a>外部變數 (External variable)</h2><p>標示為 extern 的變數不能被初始賦值，他告訴程式這個變數<strong>已經在別處被定義</strong>，有可能是在同一個檔案，或是 include 進來的另一份檔案，如下面的程式，若 number 沒有加上 <code>extern</code> 關鍵字，則在編譯階段就會出錯。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">extern</span> <span class="keyword">int</span> number;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d"</span>, number);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> number = <span class="number">24</span>;</span><br></pre></td></tr></table></figure>
+
+<p>好吧，那另一個情境下，我只是要使用 include 檔案的變數呢？不加<code>extern</code> 也不會報錯，畢竟他們都存在於 Global Scope 底下，能夠直接存取。</p>
+<p>加上 extern 的好處是能夠提高程式的<strong>可讀性</strong>，讓讀者知道這個變數並非在這個 scope 中定義，而是在其他檔案 / scope。</p>
+<p>我們實際來看一個例子，當我要去存取另一個檔案裡的變數：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// number.h</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">float</span> PI = <span class="number">3.14</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="不使用-extern"><a href="#不使用-extern" class="headerlink" title="不使用 extern"></a>不使用 extern</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;number.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%f"</span>, PI);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-extern"><a href="#使用-extern" class="headerlink" title="使用 extern"></a>使用 extern</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;number.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">extern</span> <span class="keyword">int</span> PI;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%f"</span>, PI)</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在使用 extern 的程式中，我能夠很明確地知道這個 PI 必定在其他地方被定義了，若不使用 extern，而 main 函式很長的話，我還得要瀏覽一下才能知道 PI 是否是一個 local variable。</p>
+<h2 id="Static-variable-amp-Static-function"><a href="#Static-variable-amp-Static-function" class="headerlink" title="Static variable &amp; Static function"></a>Static variable &amp; Static function</h2><p>剛剛有提到，非 static 的函式都會變成全域函式，但在寫 OOP 時，我們希望一個模組能夠被封裝 (Encapsulation)，也就是<strong>限制外部使用者存取它的資料</strong>，大量的全域函式使模組之間的介面變得模糊，這對模組化的開發模式帶來許多不便。</p>
+<p>使用 Static 宣告的變數或函式，對於其他 .c 檔案來說是<strong>不可見</strong>的，它的作用域只存在於它被宣告出來的 source 之中。</p>
+<img src="/2020/01/08/ScopesInC/scope1.png">
+
+<p>以下我們用一個例子來說明， number.h 宣告一個 <code>number 變數</code>，<strong>在非 static 的狀況下，number 只能被定義在 main.c 或是 data.c 其中一個 source 中</strong>。若重複定義，會在編譯過程中出現錯誤。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// number.h</span></span><br><span class="line"><span class="keyword">int</span> number;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getNumber</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.c</span></span><br><span class="line"><span class="keyword">int</span> number = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d"</span>, number);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// data.c</span></span><br><span class="line"><span class="keyword">int</span> number = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getNumber</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> number;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的程式在 linking 階段會產生錯誤，你會看到 gcc 吐了 <code>duplicated symbol</code> 的錯誤。</p>
+<p>接下來，我們希望在 main.c 直接存取 number 變數與呼叫 data.c 的 getNumber 函式能夠取回不同的值，我們來試試看 static。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// number.h</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> number;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getNumber</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.c</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> number = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"number in main.c: %d"</span>, number);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"number in data.c: %d"</span>, getNumber());</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// data.c</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> number = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getNumber</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> number;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>觀察結果會看到 main.c 的 number 與 data.c 的 number <strong>同時存在</strong>了，應該說，他們存在於不同的作用域中，就像兩個函式的區域變數一樣。</p>
+<p>那如果 main.c 裡面不定義 number 的話，他會印出什麼值呢？</p>
+<p>由於 data.c 的 number 對於 main.c 來說是<strong>不可見的</strong>，所以 number 就等於是一個「有宣告卻沒定義的變數」，因此印出來的結果會是 garbage value。</p>
+
+      </div>
+      <hr />
+      <div class="p2">
+        <h3 class="h3">喜歡這篇文章嗎？</h3>
+        <p>歡迎點擊按鈕分享到 Facebook 上唷！</p>
+        <div class="fb-share-button" data-href="/2020/01/08/ScopesInC/" data-layout="button" size="large"></div>
+      </div>
+
+      <div class="p2 border-top">
+        <div class="clearfix">
+          <div class="left">
+            
+          </div>
+          <div class="ml2 right">
+            <span class="h6 muted black">
+              
+              <a class="link" href="/categories/Book/">Book</a> 
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  DISQUS	-->
+  
+  <div class="md-col-10 mx-auto mt2">
+    <div class="overflow-hidden bg-white rounded">
+      <div class="m1 p2 white">
+        <div id="disqus_thread"></div>
+        <script>
+          var disqus_shortname = 'kuan-and-the-elephant'
+          ;(function() {
+            // DON'T EDIT BELOW THIS LINE
+            var d = document,
+              s = d.createElement('script')
+
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+
+            s.setAttribute('data-timestamp', +new Date())
+            ;(d.head || d.body).appendChild(s)
+          })()
+        </script>
+        <noscript
+          >Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript
+        >
+      </div>
+    </div>
+  </div>
+   
+  <div class="clearfix mt2">
+     
+    <a href="/2019/12/24/CSAPP-2/" class="right btn">
+      next: CS:APP 筆記 (一) - Hello, world 的奇幻旅程
+      <svg class="icon" data-icon="chevron-right"></svg>
+    </a>
+    
+  </div>
+  
+
+  <!--  FACEBOOK PLUGIN	-->
+  <div id="fb-root"></div>
+  <script>
+    ;(function(d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0]
+      if (d.getElementById(id)) return
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0'
+      fjs.parentNode.insertBefore(js, fjs)
+    })(document, 'script', 'facebook-jssdk')
+  </script>
+</div>
+
+
+			</div>
+		</div>
+	</section>
+	<div class="container mb2 clearfix">
+	<div class="sm-flex center nowrap mb2 h5">
+		<div class="flex-auto border-bottom">
+			<a href="https://hexo.io/" class="btn block muted">Hexo</a>
+		</div>
+		<div class="flex-auto border-bottom">
+			<a href="https://zllovesuki.git.sx/essays/2016/02/hexo-theme-weightless/" class="btn block">Weightless</a> Theme
+		</div>
+		<div class="flex-auto border-bottom">
+			Rocking <a href="http://www.basscss.com/" class="btn block">Basscss</a>
+		</div>
+		<div class="flex-auto border-bottom">
+			
+		</div>
+	</div>
+</div>
+<script src="/js/geomicons.js"></script>
+<script type="text/javascript">
+	var icons = document.querySelectorAll('[data-icon]');
+	geomicons.inject(icons);
+</script>
+
+
+
+
+</body>
+</html>
